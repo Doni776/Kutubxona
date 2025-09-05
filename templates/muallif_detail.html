@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>{{ muallif.ism }}</h1>
+<p>Jins: {{ muallif.jins }}</p>
+<p>Tug‘ilgan sana: {{ muallif.tugilgan_sana }}</p>
+<p>Kitob soni: {{ muallif.kitob_soni }}</p>
+<p>Tirik: {{ muallif.tirik }}</p>
+
+<h2>Muallifning kitoblari:</h2>
+<ul>
+  {% for kitob in kitoblar %}
+    <li>{{ kitob.nom }} ({{ kitob.sahifa }} sahifa)</li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>

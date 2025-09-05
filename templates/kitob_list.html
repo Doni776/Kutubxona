@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitoblar</title>
+</head>
+<body>
+<h1>Kitoblar ro'yxati</h1>
+<ul>
+  {% for kitob in kitoblar %}
+    <li>
+      <a href="{% url 'kitob_detail' kitob.id %}">{{ kitob.nom }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>
