@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recordni o‘chirish</title>
+</head>
+<body>
+    <h2>"{{ record.talaba }}" ning "{{ record.kitob }}" recordini o‘chirishni xohlaysizmi?</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Ha, o‘chirish</button>
+        <a href="{% url 'record_list' %}">Bekor qilish</a>
+    </form>
+</body>
+</html>

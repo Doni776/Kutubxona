@@ -1,0 +1,6 @@
+<h2>{{ muallif.ism }} ni o‘chirishni xohlaysizmi?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Ha, o‘chirish</button>
+    <a href="{% url 'muallif_list' %}">Bekor qilish</a>
+</form>

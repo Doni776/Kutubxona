@@ -2,17 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Recordlar</title>
 </head>
 <body>
-<h1>Recordlar ro'yxati</h1>
-<ul>
-  {% for record in recordlar %}
-    <li>
-      <a href="{% url 'record_detail' record.id %}">{{ record.talaba }} - {{ record.kitob }}</a>
-    </li>
-  {% endfor %}
-</ul>
+    <h1>Recordlar ro'yxati</h1>
 
+    <!-- Qidiruv formasi -->
+    <form method="get">
+        <input type="text" name="q" placeholder="Talaba ismi bo‘yicha qidirish" value="{{ request.GET.q }}">
+        <button type="submit">Qidirish</button>
+    </form>
+
+    <ul>
+      {% for record in recordlar %}
+        <li>
+          <a href="{% url 'record_detail' record.id %}">{{ record.talaba }} - {{ record.kitob }}</a>
+          | <a href="{% url 'record_delete' record.id %}">O‘chirish</a>
+        </li>
+      {% empty %}
+        <li>Hech qanday record topilmadi.</li>
+      {% endfor %}
+    </ul>
 </body>
 </html>

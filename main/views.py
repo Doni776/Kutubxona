@@ -1,12 +1,19 @@
 from django.shortcuts import render
 from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from .models import *
+
+def home(request):
+    return render(request, "home.html")
 
 # 1
 def muallif_list(request):
+    q = request.GET.get("q")
     mualliflar = Muallif.objects.all()
+    if q:
+        mualliflar = mualliflar.filter(ism__icontains=q)
     return render(request, "muallif_list.html", {"mualliflar": mualliflar})
+
 
 # 2
 def muallif_detail(request, pk):
@@ -26,8 +33,12 @@ def kitob_detail(request, pk):
 
 # 5
 def record_list(request):
+    q = request.GET.get("q")
     recordlar = Record.objects.select_related("kitob", "talaba", "admin").all()
+    if q:
+        recordlar = recordlar.filter(talaba__ism__icontains=q)
     return render(request, "record_list.html", {"recordlar": recordlar})
+
 
 # 6
 def tirik_mualliflar(request):
@@ -80,4 +91,16 @@ def bitiruvchi_recordlar(request):
     recordlar = Record.objects.filter(talaba__kurs=4)
     return render(request, "bitiruvchi_recordlar.html", {"recordlar": recordlar})
 
+def muallif_delete(request, pk):
+    muallif = get_object_or_404(Muallif, pk=pk)
+    if request.method == "POST":
+        muallif.delete()
+        return redirect("muallif_list")
+    return render(request, "muallif_confirm_delete.html", {"muallif": muallif})
 
+def record_delete(request, pk):
+    record = get_object_or_404(Record, pk=pk)
+    if request.method == "POST":
+        record.delete()
+        return redirect("record_list")
+    return render(request, "record_confirm_delete.html", {"record": record})

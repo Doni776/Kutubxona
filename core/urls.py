@@ -4,6 +4,7 @@ from main.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", home, name="home"),
     path("mualliflar/", muallif_list, name="muallif_list"),
     path("muallif/<int:pk>/", muallif_detail, name="muallif_detail"),
     path("kitoblar/", kitob_list, name="kitob_list"),
@@ -17,4 +18,6 @@ urlpatterns = [
     path("badiiy_kitoblar/", badiiy_kitoblar, name="badiiy_kitoblar"),
     path("bitiruvchi_recordlar/", bitiruvchi_recordlar, name="bitiruvchi_recordlar"),
     path("kam_kitobli_mualliflari/", kam_kitobli_muallif_kitoblar, name="kam_kitobli_muallif_kitoblar"),
+    path("muallif/<int:pk>/delete/", muallif_delete, name="muallif_delete"),
+path("record/<int:pk>/delete/", record_delete, name="record_delete"),
 ]

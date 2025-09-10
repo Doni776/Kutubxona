@@ -5,14 +5,23 @@
     <title>Mualliflar</title>
 </head>
 <body>
-      <h1>Barcha Mualliflar</h1>
+    <h1>Barcha Mualliflar</h1>
+
+    <!-- Qidiruv formasi -->
+    <form method="get">
+        <input type="text" name="q" placeholder="Muallif ismi bo‘yicha qidirish" value="{{ request.GET.q }}">
+        <button type="submit">Qidirish</button>
+    </form>
+
     <ul>
         {% for muallif in mualliflar %}
             <li>
                 <a href="{% url 'muallif_detail' muallif.id %}">{{ muallif.ism }}</a>
+                | <a href="{% url 'muallif_delete' muallif.id %}">O‘chirish</a>
             </li>
+        {% empty %}
+            <li>Hech qanday muallif topilmadi.</li>
         {% endfor %}
     </ul>
-
 </body>
 </html>
