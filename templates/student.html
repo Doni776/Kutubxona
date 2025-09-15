@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Talabalar</title>
+</head>
+<body>
+    <h2>Talabalar ro‘yxati</h2>
+
+    <!-- Qidiruv -->
+    <form method="get">
+        <input type="text" name="search" placeholder="Ism qidirish..." value="{{ search }}">
+        <button type="submit">Qidirish</button>
+    </form>
+    <br>
+
+    <!-- Alifbo tartibi -->
+    <form method="get">
+        <label for="order_input">Ism bo‘yicha tartiblash:</label>
+        <select id="order_input" name="ordering">
+            <option value="ism" {% if ordering == "ism" %}selected{% endif %}>A → Z</option>
+            <option value="-ism" {% if ordering == "-ism" %}selected{% endif %}>Z → A</option>
+        </select>
+        <button type="submit">Tartiblash</button>
+    </form>
+    <br>
+
+    <!-- Kurs bo‘yicha filter -->
+    <form method="get">
+        <label for="kurs">Kurs bo‘yicha:</label>
+        <select name="kurs" id="kurs">
+            <option value="">Barchasi</option>
+            <option value="1" {% if kurs == "1" %}selected{% endif %}>1-kurs</option>
+            <option value="2" {% if kurs == "2" %}selected{% endif %}>2-kurs</option>
+            <option value="3" {% if kurs == "3" %}selected{% endif %}>3-kurs</option>
+            <option value="4" {% if kurs == "4" %}selected{% endif %}>4-kurs</option>
+        </select>
+        <button type="submit">Filterlash</button>
+    </form>
+    <br>
+
+    <!-- Talabalar ro‘yxati -->
+    {% for student in students %}
+        <p>{{ student.ism }} — {{ student.kurs }}-kurs</p>
+    {% empty %}
+        <p>Hech qanday talaba topilmadi.</p>
+    {% endfor %}
+    <hr>
+<h3>Yangi talaba qo'shish</h3>
+    <form method="post">
+    {% csrf_token %}
+        <label for="name">Ism: </label>
+        <input id="name" type="text" name="ism" required>
+        <br><br>
+        <label for="group">Guruh: </label>
+        <input id="group" type="text" name="guruh" required>
+        <br><br>
+        <label for="course">Kurs: </label>
+        <input id="course" type="number" name="kurs" value="1" required>
+        <br><br>
+        <label for="books">Kitob soni: </label>
+        <input id="books" type="number" name="kitob_soni" value="0">
+        <br><br>
+        <button>Qo'shish</button>
+        <br><br>
+    </form>
+</body>
+</html>

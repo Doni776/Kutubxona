@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kutubxonachilar</title>
+</head>
+<body>
+<h1>Kutubxonachilar ro'yxati</h1>
+<ul>
+  {% for admin in adminlar %}
+    <li>{{ admin.ism }} - {{ admin.telefon }} - {{ admin.ish_vaqti }}</li>
+  {% endfor %}
+</ul>
+
+<h4>Yangi kutubxonachi qo'shish</h4>
+<form method="post">
+    {% csrf_token %}
+    <label for="ism">Ism: </label>
+    <input id="ism" type="text" name="ism" required>
+    <br><br>
+
+
+    <label for="ish_vaqti">Ish vaqti: </label>
+    <select id="ish_vaqti" name="ish_vaqti" required>
+        <option value="08:00-16:00">08:00 - 16:00</option>
+        <option value="16:00-21:00">16:00 - 21:00</option>
+    </select>
+    <br><br>
+
+    <button>Qo'shish</button>
+</form>
+
+</body>
+</html>

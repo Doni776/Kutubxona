@@ -19,5 +19,7 @@ urlpatterns = [
     path("bitiruvchi_recordlar/", bitiruvchi_recordlar, name="bitiruvchi_recordlar"),
     path("kam_kitobli_mualliflari/", kam_kitobli_muallif_kitoblar, name="kam_kitobli_muallif_kitoblar"),
     path("muallif/<int:pk>/delete/", muallif_delete, name="muallif_delete"),
-path("record/<int:pk>/delete/", record_delete, name="record_delete"),
+    path("record/<int:pk>/delete/", record_delete, name="record_delete"),
+    path("student/", student, name="student"),
+    path("admin_list/", admin_list, name="admin_list"),
 ]
