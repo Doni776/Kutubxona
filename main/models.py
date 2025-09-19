@@ -17,7 +17,7 @@ class Talaba(models.Model):
 class Muallif(models.Model):
 
     ism = models.CharField(max_length=100)
-    jins = models.CharField(max_length=10, choices=[('Erkak', 'Erkak'), ('Ayol', 'Ayol')])
+    jins = models.CharField(max_length=10, choices=[('Erkak', 'Erkak'), ('Ayol', 'Ayol')], null=True, blank=True)
     tugilgan_sana = models.DateField()
     kitob_soni = models.IntegerField()
     tirik = models.BooleanField(default=True)

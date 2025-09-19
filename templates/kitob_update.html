@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitob | Update</title>
+</head>
+<body>
+<h1>{{ kitob.nom }} ma'lumotlarini o'zgartirish</h1>
+<hr>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>Saqlash</button>
+</form>
+
+<a href="/kitoblar/">
+    <button type="button">Ortga</button>
+</a>
+
+</body>
+</html>

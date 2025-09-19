@@ -2,64 +2,114 @@ from django.shortcuts import render
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect
 from .models import *
+from .forms import *
 
 def home(request):
     return render(request, "home.html")
 
-# 1
+
 def muallif_list(request):
     q = request.GET.get("q")
     mualliflar = Muallif.objects.all()
+
+    if request.method == 'POST':
+        form = MuallifForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('muallif_list')
+
+    context = {
+        'mualliflar': mualliflar,
+        'form': MuallifForm,
+    }
+    return render(request, 'muallif_list.html', context)
+
     if q:
         mualliflar = mualliflar.filter(ism__icontains=q)
+
+
     return render(request, "muallif_list.html", {"mualliflar": mualliflar})
 
 
-# 2
+def muallif_update(request, pk):
+    muallif = get_object_or_404(Muallif, id=pk)
+    if request.method == "POST":
+        muallif.ism = request.POST.get("ism")
+        muallif.jins = request.POST.get("jins")
+        muallif.tugilgan_sana = request.POST.get("tugilgan_sana")
+        muallif.kitob_soni = request.POST.get("kitob_soni")
+        muallif.tirik = True if request.POST.get("tirik") == "on" else False
+        muallif.save()
+        return redirect("/muallif/")
+
+    context = {"muallif_list": muallif}
+    return render(request, "muallif_update.html", context)
+
+
 def muallif_detail(request, pk):
     muallif = get_object_or_404(Muallif, pk=pk)
     kitoblar = Kitob.objects.filter(muallif=muallif)
     return render(request, "muallif_detail.html", {"muallif": muallif, "kitoblar": kitoblar})
 
-# 3
-def kitob_list(request):
-    if request.method == "POST":
-        Kitob.objects.create(
-            nomi=request.POST.get("nom"),
-            janr=request.POST.get("janr"),
-            sahifa=request.POST.get("sahifa"),
-            muallif=get_object_or_404(Muallif, id=request.POST.get("muallif_id"))
 
-        )
-        return redirect("/kitob_list/")
+def kitob_list(request):
+
     mualliflar = Muallif.objects.all()
     kitoblar = Kitob.objects.select_related("muallif").all()
-    return render(request, "kitob_list.html", {"kitoblar": kitoblar, "mualliflar": mualliflar,})
 
-# 4
+    if request.method == 'POST':
+        form = KitobForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('kitob_list')
+
+    context = {
+        'mualliflar': mualliflar,
+        'kitoblar': kitoblar,
+        'form': KitobForm,}
+    return render(request, "kitob_list.html", context)
+
+def kitob_update(request, pk):
+    kitob = get_object_or_404(Kitob, id=pk)
+    mualliflar = Muallif.objects.all()
+
+    if request.method == "POST":
+        kitob.nom = request.POST.get("nom")
+        kitob.janr = request.POST.get("janr")
+        kitob.sahifa = request.POST.get("sahifa")
+        muallif_id = request.POST.get("muallif")
+        kitob.muallif = get_object_or_404(Muallif, id=pk)
+        kitob.save()
+        return redirect("/kitob_list/")
+
+    context = {
+        "kitob": kitob,
+        "mualliflar": mualliflar
+    }
+    return render(request, "kitob_update.html", context)
+
+
 def kitob_detail(request, pk):
     kitob = get_object_or_404(Kitob, pk=pk)
     return render(request, "kitob_detail.html", {"kitob": kitob})
 
-# 5
 def record_list(request):
     if request.method == "POST":
-        Record.objects.create(
-            kitob=get_object_or_404(Kitob, id=request.POST.get("kitob_id")),
-            talaba=get_object_or_404(Talaba, id=request.POST.get("talaba_id")),
-            admin=get_object_or_404(Admin, id=request.POST.get("admin_id")),
-            olingan_sana=request.POST.get("olingan_sana"),
-            qaytargan_sana=request.POST.get("qaytargan_sana")
-        )
+        form = RecordForm(request.POST)
+        if form.is_valid():
+            form.save()
+
         return redirect("record_list")
     kitoblar = Kitob.objects.all()
     talabalar = Talaba.objects.all()
     adminlar = Admin.objects.all()
-    return render(request, "record_list.html", {
+
+    context = {
         "kitoblar": kitoblar,
         "talabalar": talabalar,
-        "adminlar": adminlar
-    })
+        "adminlar": adminlar,
+        'form': RecordForm }
+    return render(request, "record_list.html", context )
 
     q = request.GET.get("q")
     recordlar = Record.objects.select_related("kitob", "talaba", "admin").all()
@@ -68,56 +118,12 @@ def record_list(request):
     return render(request, "record_list.html", {"recordlar": recordlar})
 
 
-# 6
-def tirik_mualliflar(request):
-    mualliflar = Muallif.objects.filter(tirik=True)
-    return render(request, "tirik_mualliflar.html", {"mualliflar": mualliflar})
 
-# 7
-def top3_kitob(request):
-    kitoblar = Kitob.objects.order_by("-sahifa")[:3]
-    return render(request, "top3_kitob.html", {"kitoblar": kitoblar})
-
-# 8
-def top3_muallif(request):
-    mualliflar = Muallif.objects.annotate(k_count=Count("kitob")).order_by("-k_count")[:3]
-    return render(request, "top3_muallif.html", {"mualliflar": mualliflar})
-
-# 9
-def oxirgi3_record(request):
-    recordlar = Record.objects.order_by("-olingan_sana")[:3]
-    return render(request, "songi3_record.html", {"recordlar": recordlar})
-
-# 10
-def tirik_muallif_kitoblar(request):
-    kitoblar = Kitob.objects.filter(muallif__tirik=True)
-    return render(request, "tirik_muallif_kitoblar.html", {"kitoblar": kitoblar})
-
-# 11
-def badiiy_kitoblar(request):
-    kitoblar = Kitob.objects.filter(janr__iexact="badiiy")
-    return render(request, "badiiy_kitoblar.html", {"kitoblar": kitoblar})
-
-# 12
-def eng_qari3_muallif(request):
-    mualliflar = Muallif.objects.order_by("tugilgan_sana")[:3]
-    return render(request, "katta3_muallif.html", {"mualliflar": mualliflar})
-
-# 13
-def kam_kitobli_muallif_kitoblar(request):
-    mualliflar = Muallif.objects.filter(kitob_soni__lt=10)
-    kitoblar = Kitob.objects.filter(muallif__in=mualliflar)
-    return render(request, "kam_kitobli_muallif_kitoblar.html", {"kitoblar": kitoblar})
-
-# 14
 def record_detail(request, pk):
     record = get_object_or_404(Record, pk=pk)
     return render(request, "record_detail.html", {"record": record})
 
-# 15
-def bitiruvchi_recordlar(request):
-    recordlar = Record.objects.filter(talaba__kurs=4)
-    return render(request, "bitiruvchi_recordlar.html", {"recordlar": recordlar})
+
 
 def muallif_delete(request, pk):
     muallif = get_object_or_404(Muallif, pk=pk)
@@ -135,13 +141,10 @@ def record_delete(request, pk):
 
 def student(request):
     if request.method == "POST":
-        Talaba.objects.create(
-            ism=request.POST.get("ism"),
-            guruh=request.POST.get("guruh"),
-            kurs=request.POST.get("kurs"),
-            kitob_soni=request.POST.get("kitob_soni") if request.POST.get("kitob_soni") else 0
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
 
-            )
         return redirect("/student/")
     students = Talaba.objects.all()
 
@@ -163,16 +166,28 @@ def student(request):
         'search': search,
         'ordering': ordering,
         'kurs': kurs,
+        'form': StudentForm
     }
     return render(request, 'student.html', context)
 
 def admin_list(request):
     if request.method == "POST":
-        Admin.objects.create(
-            ism=request.POST.get("ism"),
-            ish_vaqti=request.POST.get("ish_vaqti"),  # models'dan choices
-        )
-        return redirect("/admin_list/")
+        form = AdminForm(request.POST)
+        if form.is_valid():
+            form.save()
 
+        return redirect("/admin_list/")
     adminlar = Admin.objects.all()
-    return render(request, "admin_list.html", {"adminlar": adminlar})
+    context = {'form': AdminForm, 'adminlar': adminlar}
+
+    return render(request, "admin_list.html", context)
+
+def student_update(request,student_id):
+    student = get_object_or_404(Talaba, id=student_id)
+    if request.method == "POST":
+        return redirect("/student/")
+
+    context = {"student": student}
+    return render(request, "student_update.html", context)
+
+

@@ -41,28 +41,24 @@
 
     <!-- Talabalar ro‘yxati -->
     {% for student in students %}
-        <p>{{ student.ism }} — {{ student.kurs }}-kurs</p>
+        <p>
+            {{ student.ism }} — {{ student.kurs }}-kurs
+            | <a href="{% url 'student_update' student.id %}">
+                    <button type="button">Tahrirlash</button>
+                  </a>
+
+        </p>
     {% empty %}
         <p>Hech qanday talaba topilmadi.</p>
     {% endfor %}
+
     <hr>
-<h3>Yangi talaba qo'shish</h3>
-    <form method="post">
+    <h3>Yangi talaba qo'shish</h3>
+<form method="POST">
     {% csrf_token %}
-        <label for="name">Ism: </label>
-        <input id="name" type="text" name="ism" required>
-        <br><br>
-        <label for="group">Guruh: </label>
-        <input id="group" type="text" name="guruh" required>
-        <br><br>
-        <label for="course">Kurs: </label>
-        <input id="course" type="number" name="kurs" value="1" required>
-        <br><br>
-        <label for="books">Kitob soni: </label>
-        <input id="books" type="number" name="kitob_soni" value="0">
-        <br><br>
-        <button>Qo'shish</button>
-        <br><br>
-    </form>
+    {{ form.as_p }}
+    <button>Saqlash</button>
+</form>
+
 </body>
 </html>

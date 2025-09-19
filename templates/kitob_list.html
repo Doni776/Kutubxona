@@ -2,42 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kitoblar</title>
+    <title>Kitoblar ro‘yxati</title>
 </head>
 <body>
-<h1>Kitoblar ro'yxati</h1>
-<ul>
-  {% for kitob in kitoblar %}
-    <li>
-      <a href="{% url 'kitob_detail' kitob.id %}">{{ kitob.nom }}</a>
-    </li>
-  {% endfor %}
-</ul>
+    <h1>Kitoblar ro‘yxati</h1>
+    <hr>
 
-<h4>Yangi kitob qo'shish</h4>
-<form method="post">
+    {% for kitob in kitoblar %}
+        <p>
+            {{ kitob.nom }} — {{ kitob.muallif.ism }}
+            | <a href="{% url 'kitob_update' pk=kitob.id %}">Tahrirlash</a>
+        </p>
+    {% empty %}
+        <p>Hozircha kitoblar mavjud emas.</p>
+    {% endfor %}
+
+<form method="POST">
     {% csrf_token %}
-    <label for="nom">Nomi: </label>
-    <input id="nom" type="text" name="nom" required>
-    <br><br>
-
-    <label for="janr">Janri: </label>
-    <input id="janr" type="text" name="janr" required>
-    <br><br>
-
-    <label for="sahifa">Sahifa: </label>
-    <input id="sahifa" type="number" name="sahifa" value="100" required>
-    <br><br>
-
-    <label for="muallif">Muallif: </label>
-    <select name="muallif_id" id="muallif">
-      {% for muallif in mualliflar %}
-         <option value="{{ muallif.id }}">{{ muallif.ism }}</option>
-      {% endfor %}
-    </select>
-    <button>Qo'shish</button>
-    <br><br>
+    {{ form.as_p }}
+    <button>Saqlash</button>
 </form>
-
+    <hr>
+    <a href="/">Bosh sahifaga qaytish</a>
 </body>
 </html>

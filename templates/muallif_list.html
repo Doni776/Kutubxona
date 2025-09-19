@@ -17,11 +17,19 @@
         {% for muallif in mualliflar %}
             <li>
                 <a href="{% url 'muallif_detail' muallif.id %}">{{ muallif.ism }}</a>
+                | <a href="{% url 'muallif_update' muallif.id %}">
+                    <button type="button">Tahrirlash</button>
+                  </a>
                 | <a href="{% url 'muallif_delete' muallif.id %}">O‘chirish</a>
             </li>
         {% empty %}
             <li>Hech qanday muallif topilmadi.</li>
         {% endfor %}
     </ul>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Saqlash</button>
+    </form>
 </body>
 </html>

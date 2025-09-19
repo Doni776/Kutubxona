@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Talaba | Update</title>
+</head>
+<body>
+<h1>{{ student.ism }}nimg malumotlarini o'zgartirish</h1>
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    <label>Ism : </label>
+    <input type="text" name="ism" id="Ism" value="{{student.ism}}">
+    <br><br>
+    <label>Guruh : </label>
+    <input type="text" name="guruh" id="Guruh" value="{{student.guruh}}">
+        <br><br>
+    <label>Kurs : </label>
+    <input type="number" name="kurs" id="Kurs" value="{{student.kurs}}">
+        <br><br>
+    <label>Kitob soni : </label>
+    <input type="number" name="kitob_soni" id="Kitob soni" value="{{student.kitob_soni}}">
+    <br><br>
+    <hr>
+    <button>
+        Saqlash
+    </button>
+
+</form>
+ <a href="/students/">
+    <button >
+        Ortga
+    </button>
+    </a>
+
+</body>
+</html>

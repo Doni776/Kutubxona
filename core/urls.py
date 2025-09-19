@@ -1,25 +1,32 @@
+from django.urls import path
 from django.contrib import admin
-from django.urls import path, include
 from main.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", home, name="home"),
+
+    # Mualliflar
     path("mualliflar/", muallif_list, name="muallif_list"),
     path("muallif/<int:pk>/", muallif_detail, name="muallif_detail"),
+    path("muallif/<int:pk>/delete/", muallif_delete, name="muallif_delete"),
+    path("muallif/<int:pk>/update/", muallif_update, name="muallif_update"),
+
+    # Kitoblar
     path("kitoblar/", kitob_list, name="kitob_list"),
     path("kitob/<int:pk>/", kitob_detail, name="kitob_detail"),
+    path("kitob/<int:pk>/update/", kitob_update, name="kitob_update"),
+
+    # Recordlar
     path("recordlar/", record_list, name="record_list"),
     path("record/<int:pk>/", record_detail, name="record_detail"),
-    path("tirik_mualliflar/", tirik_mualliflar, name="tirik_mualliflar"),
-    path("top3_kitob/", top3_kitob, name="top3_kitob"),
-    path("top3_muallif/", top3_muallif, name="top3_muallif"),
-    path("songi3_record/", oxirgi3_record, name="oxirgi3_record"),
-    path("badiiy_kitoblar/", badiiy_kitoblar, name="badiiy_kitoblar"),
-    path("bitiruvchi_recordlar/", bitiruvchi_recordlar, name="bitiruvchi_recordlar"),
-    path("kam_kitobli_mualliflari/", kam_kitobli_muallif_kitoblar, name="kam_kitobli_muallif_kitoblar"),
-    path("muallif/<int:pk>/delete/", muallif_delete, name="muallif_delete"),
     path("record/<int:pk>/delete/", record_delete, name="record_delete"),
+
+
+    # Talabalar
     path("student/", student, name="student"),
+    path("student/<int:student_id>/update/", student_update, name="student_update"),
+
+    # Adminlar
     path("admin_list/", admin_list, name="admin_list"),
 ]
